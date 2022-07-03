@@ -25,6 +25,14 @@ describe('auth routes for top secret information', () => {
       email,
     });
   });
+
+  it('signs in an existing user', async () => {
+    await request(app).post('/api/v1/users').send(mockUser);
+    const res = await request(app)
+      .post('/api/v1/users/sessions')
+      .send({ email: mockUser.email, password: mockUser.password });
+    expect(res.status).toEqual(200);
+  });
   afterAll(() => {
     pool.end();
   });
