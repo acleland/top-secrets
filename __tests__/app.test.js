@@ -2,7 +2,6 @@ const pool = require('../lib/utils/pool');
 const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
-const User = require('../lib/models/User');
 const UserService = require('../lib/services/UserService');
 
 const mockUser = {
@@ -58,6 +57,13 @@ describe('auth routes for top secret information', () => {
     const [agent] = await registerAndLogin();
     const res = await agent.get('/api/v1/secrets');
     expect(res.status).toEqual(200);
+  });
+
+  it('POST /secrets should return a 401 if not authenticated', async () => {
+    const res = await request(app)
+      .post('/api/v1/secrets')
+      .send({ secret: 'bwahahaha I hacked your database' });
+    expect(res.status).toEqual(401);
   });
 
   afterAll(() => {
