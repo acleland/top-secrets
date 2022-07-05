@@ -33,6 +33,11 @@ describe('auth routes for top secret information', () => {
       .send({ email: mockUser.email, password: mockUser.password });
     expect(res.status).toEqual(200);
   });
+
+  it('/secrets should return a 401 if not authenticated', async () => {
+    const res = await request(app).get('/api/v1/secrets');
+    expect(res.status).toEqual(401);
+  });
   afterAll(() => {
     pool.end();
   });
