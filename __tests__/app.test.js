@@ -66,6 +66,14 @@ describe('auth routes for top secret information', () => {
     expect(res.status).toEqual(401);
   });
 
+  it('POST /secrets should return status 200 if authenticated', async () => {
+    const [agent] = await registerAndLogin();
+    const res = await agent
+      .post('/api/v1/secrets')
+      .send({ secret: 'I am a valid user, so this is okay' });
+    expect(res.status).toEqual(200);
+  });
+
   afterAll(() => {
     pool.end();
   });
